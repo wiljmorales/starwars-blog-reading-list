@@ -26,6 +26,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 					alert("fallamos ='(")
 					console.log(error)
 				} 
+			},
+			getPlanets: async () => {
+				try {
+					const response = await fetch(
+						`${API_URL}planets`
+					)
+					const body = await response.json()
+					if (response.status !== 200) {
+						alert("no pudimos cargar los planetas")
+						return
+					}
+					setStore({
+						planets: body.results
+					})
+				} catch (error) {
+					alert("lo siento no me pegues pero falle")
+					console.log(error)
+				}
 			}
 		}
 	};
