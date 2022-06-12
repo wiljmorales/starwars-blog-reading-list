@@ -1,28 +1,27 @@
 import React, { useContext } from "react";
 import "../../styles/home.css";
 import { Card } from "../component/Card";
+import { CardsCarousel } from "../component/CardsCarousel";
 import { Context } from "../store/appContext";
 
 export const Home = () => {
 	const {store, actions} = useContext(Context)
 	return (
 		<div className="text-center mt-5">
-			<div className="d-flex overflow-auto container-fluid mb-5">
+			<CardsCarousel title={"Characters"}>
 				{store.characters.map(
 					(character) => {
 						return (
-							<div key={character.uid}>
-								<div >
-									{character.name}
-								</div>
-								<img src={`https://starwars-visualguide.com/assets/img/characters/${character.uid}.jpg`}/>
-								{/* <img src={"https://starwars-visualguide.com/assets/img/characters/"+character.uid+".jpg"}/> */}
-							</div>
+							<Card
+									key={character.uid}
+									item={character}
+									resource={"characters"}
+								/>
 						)
 					}
 				)}
-			</div>
-				<div className="d-flex overflow-auto container-fluid mb-5">
+			</CardsCarousel>
+			<CardsCarousel title={"Planets"}>
 					{store.planets.map(
 						planet => {
 							return (
@@ -34,7 +33,18 @@ export const Home = () => {
 							)
 						}
 					)}
-				</div>
+			</CardsCarousel>
+			<CardsCarousel title={"Vehicles"}>
+				{store.vehicles.map(vehicle =>{
+					return (
+						<Card 
+							key={vehicle.uid}
+							item={vehicle}
+							resource={"vehicles"}
+						/>
+					)
+				} )}
+			</CardsCarousel>
 		</div>
 	)
 };
