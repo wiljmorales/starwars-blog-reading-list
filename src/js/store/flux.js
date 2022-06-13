@@ -1,3 +1,5 @@
+import { element } from "prop-types";
+
 const API_URL = "https://www.swapi.tech/api/"
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -8,39 +10,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 			vehicles: []
 		},
 		actions: {
-			getResourceList: async (resource) => {
-					try {
-						const response = await fetch(
-						`${API_URL}${resource}`
-					)
-					const body = await response.json()
-					if (response.status !==200) {
-						alert(`no pudimos cargar los ${resource}`)
-						return
-					}
-					if (resource === 'people') {
-						setStore({
-							characters: body.results
-						})
-					}
-					if (resource === 'planets') {
-						setStore({
-							planets: body.results
-						})
-					}
-					if (resource === 'vehicles') {
-						setStore({
-							vehicles: body.results
-						})
-					}
+			updateResourceList: async (resource, list) => {
+				const resourceList = await getResources(resource)
+				for(element of resourceList) {
+					const details = await getResources(`${resource}/${element.uid}`, true)
+					element.details = details
 				}
-				catch(error) {
-					alert("fallamos ='(")
-					console.log(error)
-				} 
-			}
+				setStore({
+					[list]: resourceList
+				})
+			},
+			hola: () => "saludo"
 		}
 	};
 };
+
+async function getResources(resource, detalis = false) {
+	try {
+		const response = await fetch(
+		`${API_URL}${resource}`
+	)
+	const body = await response.json()
+	if (response.status !==200) {
+		alert(`no pudimos cargar los ${resource}`)
+		return
+	}	
+		if (detalis) {
+			return body.result
+		}
+		return body.results
+	}
+	catch(error) {
+		alert("fallamos ='(")
+		console.log(error)
+	} 
+}
+
 
 export default getState;
