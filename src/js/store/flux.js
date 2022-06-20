@@ -12,15 +12,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 		actions: {
 			updateResourceList: async (resource, list) => {
 				const resourceList = await getResources(resource)
-				for(element of resourceList) {
-					const details = await getResources(`${resource}/${element.uid}`, true)
-					element.details = details
-				}
+				// for(element of resourceList) {
+				// 	const details = await getResources(`${resource}/${element.uid}`, true)
+				// 	element.details = details
+				// }
 				setStore({
 					[list]: resourceList
 				})
 			},
-			hola: () => "saludo"
+			updateAllLists: async () =>{
+				const actions = getActions()
+				await actions.updateResourceList('people', 'characters')
+				await actions.updateResourceList('planets', 'planets')
+				await actions.updateResourceList('vehicles', 'vehicles')
+			}
 		}
 	};
 };
