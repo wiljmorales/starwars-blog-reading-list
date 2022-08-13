@@ -5,7 +5,7 @@ import { CardsCarousel } from "../component/CardsCarousel";
 import { Context } from "../store/appContext";
 
 export const Home = () => {
-	const {store, actions} = useContext(Context)
+	const {store} = useContext(Context)
 	return (
 		<div className="text-center mt-5">
 			<CardsCarousel title={"Characters"}>
