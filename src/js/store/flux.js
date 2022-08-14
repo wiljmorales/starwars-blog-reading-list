@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			singleCharacter: {},
 			singlePlanet: {},
 			singleVehicle: {},
+			favorites: [],
 		},
 		actions: {
 			updateResourceList: async (resource, list) => {
@@ -84,6 +85,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 			},
+			addFavorite: (favorite) => {
+				const store = getStore()
+				const newFavorites = [...store.favorites, favorite]
+				setStore({
+					favorites: newFavorites
+				})
+			},
+			removeFavorite: (favoriteName) => {
+				const store = getStore()
+				const newFavorites = store.favorites.filter(favorite => favorite.name !== favoriteName)
+				setStore({
+					favorites: newFavorites
+				})
+			}
 		}
 	};
 };
