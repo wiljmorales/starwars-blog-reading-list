@@ -7,11 +7,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			characters: [],
 			planets: [],
-			vehicles: []
+			vehicles: [],
+			singleCharacter: {},
+			singlePlanet: {},
+			singleVehicle: {},
 		},
 		actions: {
 			updateResourceList: async (resource, list) => {
-				const resourceList = await getResources(resource)
+				const actions = getActions()
+				const resourceList = await actions.getResources(resource)
 				// for(element of resourceList) {
 				// 	const details = await getResources(`${resource}/${element.uid}`, true)
 				// 	element.details = details
@@ -25,31 +29,65 @@ const getState = ({ getStore, getActions, setStore }) => {
 				await actions.updateResourceList('people', 'characters')
 				await actions.updateResourceList('planets', 'planets')
 				await actions.updateResourceList('vehicles', 'vehicles')
-			}
+			},
+
+			getResources: async  (resource, detalis = false) => {
+				try {
+					const response = await fetch(
+					`${API_URL}${resource}`
+				)
+				const body = await response.json()
+				if (response.status !==200) {
+					alert(`no pudimos cargar los ${resource}`)
+					return
+				}	
+					if (detalis) {
+						return body.result
+					}
+					return body.results
+				}
+				catch(error) {
+					alert("fallamos ='(")
+					console.log(error)
+				} 
+			},
+			getCharacter: async (id) => {
+				const actions = getActions()
+				const character = await actions.getResources(`people/${id}`, true)
+				setStore({
+					singleCharacter: {
+						...character.properties,
+						uid: character.uid,
+						description: character.description
+					}
+				})
+			},
+			getPlanet: async (id) => {
+				const actions = getActions()
+				const planet = await actions.getResources(`planets/${id}`, true)
+				setStore({
+					singlePlanet: {
+						...planet.properties,
+						uid: planet.uid,
+						description: planet.description
+					}
+				})
+			},
+			getVehicle: async (id) => {
+				const actions = getActions()
+				const vehicle = await actions.getResources(`vehicles/${id}`, true)
+				setStore({
+					singleVehicle: {
+						...vehicle.properties,
+						uid: vehicle.uid,
+						description: vehicle.description
+					}
+				})
+			},
 		}
 	};
 };
 
-async function getResources(resource, detalis = false) {
-	try {
-		const response = await fetch(
-		`${API_URL}${resource}`
-	)
-	const body = await response.json()
-	if (response.status !==200) {
-		alert(`no pudimos cargar los ${resource}`)
-		return
-	}	
-		if (detalis) {
-			return body.result
-		}
-		return body.results
-	}
-	catch(error) {
-		alert("fallamos ='(")
-		console.log(error)
-	} 
-}
 
 
 export default getState;

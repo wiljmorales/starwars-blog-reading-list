@@ -10,8 +10,8 @@ export const Card = ({item, resource}) =>{
       <div className="card-body">
         <h5 className="card-title">{item.name}</h5>
         <div className="d-flex justify-content-between mt-3">
-          <Link to={`/single/${item.id}`} className="btn btn-primary">Learn More</Link>
-          <button type="button" class="btn btn-outline-danger"><i class="fa-regular fa-heart"></i></button>
+          <Link to={`/${resource}/${item.uid}`} className="btn btn-primary">Learn More</Link>
+          <button type="button" className="btn btn-outline-danger"><i className="fa-regular fa-heart"></i></button>
         </div>
       </div>
     </div>
